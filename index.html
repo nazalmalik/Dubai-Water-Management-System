@@ -1,0 +1,2961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dubai Water Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Sans+Arabic:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04080f;
+  --bg2: #060d18;
+  --bg3: #091524;
+  --panel: #0a1628;
+  --panel2: #0d1f38;
+  --border: #1a3a5c;
+  --border2: #1e4570;
+  --cyan: #00d4ff;
+  --cyan2: #00a8cc;
+  --cyan3: #007a99;
+  --gold: #f0a500;
+  --gold2: #c47f00;
+  --green: #00e676;
+  --green2: #00c853;
+  --red: #ff3d3d;
+  --red2: #cc0000;
+  --orange: #ff9800;
+  --yellow: #ffeb3b;
+  --text: #e0f4ff;
+  --text2: #8ab4d0;
+  --text3: #4a7a9b;
+  --glow: 0 0 20px rgba(0,212,255,0.3);
+  --glow2: 0 0 40px rgba(0,212,255,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 220px;
+  background: linear-gradient(180deg, #050e1c 0%, #04080f 100%);
+  border-right: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  padding: 20px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan3));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 0 20px rgba(0,212,255,0.4);
+  animation: pulse-logo 3s ease-in-out infinite;
+}
+
+@keyframes pulse-logo {
+  0%,100% { box-shadow: 0 0 20px rgba(0,212,255,0.4); }
+  50% { box-shadow: 0 0 35px rgba(0,212,255,0.7); }
+}
+
+.logo-text {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--cyan);
+  text-transform: uppercase;
+}
+
+.logo-sub {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.nav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+
+.nav-section {
+  padding: 8px 18px 4px;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  letter-spacing: 0.5px;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--text);
+  background: rgba(0,212,255,0.06);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  background: var(--cyan);
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 10px var(--cyan);
+}
+
+.nav-item.active .nav-icon { color: var(--cyan); }
+
+.nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: #fff;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.nav-badge.gold { background: var(--gold); color: #000; }
+
+.sidebar-footer {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.sys-time {
+  color: var(--cyan);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+/* ===== MAIN ===== */
+.main {
+  margin-left: 220px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  height: 60px;
+  background: rgba(6,13,24,0.95);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  backdrop-filter: blur(10px);
+}
+
+.page-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.page-title span { color: var(--cyan); }
+
+.topbar-divider { flex: 1; }
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,230,118,0.08);
+  border: 1px solid rgba(0,230,118,0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--green);
+}
+
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.dot.red { background: var(--red); }
+.dot.orange { background: var(--orange); animation: none; }
+.dot.yellow { background: var(--yellow); animation: none; }
+
+.topbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.topbar-btn.primary {
+  background: linear-gradient(135deg, var(--cyan3), var(--cyan2));
+  color: #000;
+}
+
+.topbar-btn.primary:hover { filter: brightness(1.2); box-shadow: var(--glow); }
+
+.topbar-btn.ghost {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+
+.topbar-btn.ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.avatar {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+  border: 2px solid rgba(240,165,0,0.3);
+}
+
+/* ===== CONTENT ===== */
+.content { padding: 20px 24px; }
+
+/* ===== SECTION TABS ===== */
+.section-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 4px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  padding: 7px 16px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,168,204,0.1));
+  color: var(--cyan);
+  border: 1px solid rgba(0,212,255,0.2);
+}
+
+.tab-btn:hover:not(.active) { color: var(--text); }
+
+/* ===== METRIC CARDS ROW ===== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.metric-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle, var(--accent, rgba(0,212,255,0.08)) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.metric-card.green-accent { --accent: rgba(0,230,118,0.1); }
+.metric-card.red-accent { --accent: rgba(255,61,61,0.1); }
+.metric-card.gold-accent { --accent: rgba(240,165,0,0.1); }
+.metric-card.orange-accent { --accent: rgba(255,152,0,0.1); }
+
+.metric-label {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.metric-value.cyan { color: var(--cyan); }
+.metric-value.green { color: var(--green); }
+.metric-value.red { color: var(--red); }
+.metric-value.gold { color: var(--gold); }
+.metric-value.orange { color: var(--orange); }
+
+.metric-sub {
+  font-size: 11px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.metric-change.up { color: var(--green); }
+.metric-change.down { color: var(--red); }
+
+/* ===== MAIN GRID ===== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title-icon { color: var(--cyan); }
+
+.panel-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 28px; height: 28px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ===== MAP ===== */
+.map-container {
+  position: relative;
+  height: 420px;
+  background: #060f1e;
+  overflow: hidden;
+}
+
+.map-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.map-controls {
+  position: absolute;
+  top: 12px; right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-btn {
+  width: 30px; height: 30px;
+  background: rgba(6,13,24,0.9);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.map-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.map-legend {
+  position: absolute;
+  bottom: 12px; left: 12px;
+  background: rgba(4,8,15,0.9);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+
+.legend-title {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.map-filter-bar {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel2);
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.filter-chip.active, .filter-chip:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0,212,255,0.06);
+}
+
+/* Plant markers on map */
+.plant-marker {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.plant-marker:hover { filter: drop-shadow(0 0 8px currentColor); }
+
+/* ===== ALERTS PANEL ===== */
+.alerts-list { max-height: 420px; overflow-y: auto; }
+
+.alert-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(26,58,92,0.5);
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.alert-item:hover { background: rgba(0,212,255,0.03); }
+
+.alert-sev {
+  width: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.alert-sev.critical { background: var(--red); }
+.alert-sev.high { background: var(--orange); }
+.alert-sev.medium { background: var(--yellow); }
+.alert-sev.low { background: var(--cyan); }
+
+.alert-body { flex: 1; }
+
+.alert-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.alert-meta {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  display: flex;
+  gap: 8px;
+}
+
+.alert-badge {
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.alert-badge.critical { background: rgba(255,61,61,0.15); color: var(--red); border: 1px solid rgba(255,61,61,0.3); }
+.alert-badge.high { background: rgba(255,152,0,0.15); color: var(--orange); border: 1px solid rgba(255,152,0,0.3); }
+.alert-badge.medium { background: rgba(255,235,59,0.15); color: var(--yellow); border: 1px solid rgba(255,235,59,0.3); }
+.alert-badge.low { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+
+/* ===== BOTTOM GRID ===== */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* ===== PLANTS TABLE ===== */
+.plants-table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+thead th {
+  padding: 10px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-weight: 500;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(26,58,92,0.4);
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+tbody tr:hover { background: rgba(0,212,255,0.03); }
+
+tbody td {
+  padding: 10px 14px;
+  color: var(--text2);
+  font-size: 12px;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 600; }
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.status-tag.operational { background: rgba(0,230,118,0.1); color: var(--green); }
+.status-tag.maintenance { background: rgba(255,152,0,0.1); color: var(--orange); }
+.status-tag.offline { background: rgba(255,61,61,0.1); color: var(--red); }
+
+/* ===== GAUGE / CHART ===== */
+.chart-area {
+  padding: 16px;
+}
+
+.mini-chart {
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.bar:hover { filter: brightness(1.3); }
+
+.bar.cyan { background: linear-gradient(180deg, var(--cyan), rgba(0,212,255,0.2)); }
+.bar.green { background: linear-gradient(180deg, var(--green), rgba(0,230,118,0.2)); }
+
+.chart-labels {
+  display: flex;
+  gap: 4px;
+  padding: 4px 4px 0;
+}
+
+.chart-label {
+  flex: 1;
+  text-align: center;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+}
+
+/* Donut chart */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+}
+
+.donut-svg { flex-shrink: 0; }
+
+.donut-legend { display: flex; flex-direction: column; gap: 8px; }
+
+.donut-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.donut-leg-dot {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.donut-leg-label { color: var(--text2); }
+.donut-leg-val { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); font-weight: 600; }
+
+/* ===== SENSOR GAUGES ===== */
+.sensors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px;
+}
+
+.sensor-tile {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.sensor-tile:hover { border-color: var(--cyan2); }
+
+.sensor-name {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.sensor-val {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cyan);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.sensor-unit {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.sensor-bar-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.sensor-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--cyan);
+}
+
+/* ===== CONTROLS PANEL ===== */
+.controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 14px;
+}
+
+.control-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.control-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.control-loc {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-label {
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.toggle {
+  position: relative;
+  width: 36px; height: 20px;
+  cursor: pointer;
+}
+
+.toggle input { display: none; }
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: var(--border2);
+  transition: background 0.2s;
+}
+
+.toggle input:checked + .toggle-track { background: var(--cyan3); }
+
+.toggle-knob {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.toggle input:checked ~ .toggle-knob { left: 18px; }
+
+.mode-select {
+  margin-top: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 4px 0;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn.active {
+  background: rgba(0,212,255,0.1);
+  border-color: var(--cyan3);
+  color: var(--cyan);
+}
+
+/* ===== MAINTENANCE ===== */
+.maintenance-list {
+  padding: 0;
+}
+
+.maint-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(26,58,92,0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.maint-item:hover { background: rgba(0,212,255,0.03); }
+
+.maint-icon {
+  width: 34px; height: 34px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.maint-icon.scheduled { background: rgba(0,212,255,0.1); }
+.maint-icon.overdue { background: rgba(255,61,61,0.1); }
+.maint-icon.done { background: rgba(0,230,118,0.1); }
+
+.maint-body { flex: 1; }
+
+.maint-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.maint-meta {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+}
+
+.maint-date {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  text-align: right;
+}
+
+/* ===== USER MANAGEMENT ===== */
+.user-list { padding: 0; }
+
+.user-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(26,58,92,0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.user-avatar.admin { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; }
+.user-avatar.engineer { background: linear-gradient(135deg, var(--cyan3), #005566); color: #fff; }
+.user-avatar.viewer { background: linear-gradient(135deg, #2a3a4a, #1a2a3a); color: var(--text2); }
+
+.user-info { flex: 1; }
+
+.user-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.user-email {
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+}
+
+.role-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-badge.admin { background: rgba(240,165,0,0.15); color: var(--gold); border: 1px solid rgba(240,165,0,0.3); }
+.role-badge.engineer { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+.role-badge.viewer { background: rgba(74,122,155,0.15); color: var(--text3); border: 1px solid var(--border); }
+
+/* ===== PREDICTIVE ANALYTICS ===== */
+.prediction-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 14px;
+}
+
+.pred-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.pred-label {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pred-val {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.pred-desc {
+  font-size: 10px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+.ai-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(240,165,0,0.1);
+  border: 1px solid rgba(240,165,0,0.2);
+  color: var(--gold);
+  font-size: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* ===== PRODUCTION CHART ===== */
+.line-chart-wrap {
+  padding: 14px 16px;
+  position: relative;
+}
+
+/* ===== SUMMARY ROW ===== */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summary-icon {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.summary-icon.cyan { background: rgba(0,212,255,0.1); }
+.summary-icon.green { background: rgba(0,230,118,0.1); }
+.summary-icon.orange { background: rgba(255,152,0,0.1); }
+.summary-icon.red { background: rgba(255,61,61,0.1); }
+
+.summary-body {}
+.summary-val { font-size: 20px; font-weight: 700; }
+.summary-val.cyan { color: var(--cyan); }
+.summary-val.green { color: var(--green); }
+.summary-val.orange { color: var(--orange); }
+.summary-val.red { color: var(--red); }
+.summary-lbl { font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), var(--glow2);
+}
+
+.modal-header {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title { font-size: 15px; font-weight: 700; letter-spacing: 1px; }
+.modal-close {
+  width: 28px; height: 28px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.modal-close:hover { border-color: var(--red); color: var(--red); }
+
+.modal-body { padding: 18px 20px; }
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.modal-field { }
+
+.modal-field-label {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.modal-field-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modal-sensors {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.modal-sensor {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 10px;
+  text-align: center;
+}
+
+.modal-sensor-val { font-size: 18px; font-weight: 700; color: var(--cyan); }
+.modal-sensor-lbl { font-size: 9px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.action-btn.primary { background: var(--cyan3); color: #000; }
+.action-btn.primary:hover { background: var(--cyan2); box-shadow: var(--glow); }
+.action-btn.danger { background: rgba(255,61,61,0.15); color: var(--red); border: 1px solid rgba(255,61,61,0.3); }
+.action-btn.danger:hover { background: rgba(255,61,61,0.25); }
+.action-btn.warning { background: rgba(255,152,0,0.15); color: var(--orange); border: 1px solid rgba(255,152,0,0.3); }
+.action-btn.warning:hover { background: rgba(255,152,0,0.25); }
+.action-btn.ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+.action-btn.ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ===== NOTIFICATION TOAST ===== */
+.toast-container {
+  position: fixed;
+  top: 70px; right: 16px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--panel2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  min-width: 260px;
+  pointer-events: all;
+  animation: slide-in 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.toast.critical { border-left: 3px solid var(--red); }
+.toast.success { border-left: 3px solid var(--green); }
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ===== SMART METER ===== */
+.meter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 14px;
+}
+
+.meter-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.meter-district {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.meter-usage {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cyan);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.meter-unit { font-size: 9px; color: var(--text3); margin-bottom: 6px; }
+
+.meter-bar-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.meter-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.meter-bar-fill.normal { background: var(--green); }
+.meter-bar-fill.high { background: var(--orange); }
+.meter-bar-fill.critical { background: var(--red); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan3); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .main-grid { grid-template-columns: 1fr; }
+  .bottom-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== SECTION VISIBILITY ===== */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ===== PRODUCTION LINE SVG ===== */
+.prod-line {
+  width: 100%;
+  height: 90px;
+}
+
+/* ===== QUICK ACTIONS ===== */
+.quick-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px;
+}
+
+.qa-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.2s;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.qa-btn.green { border-color: rgba(0,230,118,0.3); color: var(--green); background: rgba(0,230,118,0.05); }
+.qa-btn.green:hover { background: rgba(0,230,118,0.12); }
+.qa-btn.red { border-color: rgba(255,61,61,0.3); color: var(--red); background: rgba(255,61,61,0.05); }
+.qa-btn.red:hover { background: rgba(255,61,61,0.12); }
+.qa-btn.orange { border-color: rgba(255,152,0,0.3); color: var(--orange); background: rgba(255,152,0,0.05); }
+.qa-btn.orange:hover { background: rgba(255,152,0,0.12); }
+.qa-btn.cyan { border-color: rgba(0,212,255,0.3); color: var(--cyan); background: rgba(0,212,255,0.05); }
+.qa-btn.cyan:hover { background: rgba(0,212,255,0.12); }
+
+/* ===== HEALTH INDICATORS ===== */
+.health-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+}
+
+.health-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid;
+}
+
+.health-pill.ok { border-color: rgba(0,230,118,0.2); color: var(--green); background: rgba(0,230,118,0.05); }
+.health-pill.warn { border-color: rgba(255,152,0,0.2); color: var(--orange); background: rgba(255,152,0,0.05); }
+.health-pill.bad { border-color: rgba(255,61,61,0.2); color: var(--red); background: rgba(255,61,61,0.05); }
+
+/* Wide table row */
+.wide { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-icon">💧</div>
+      <div>
+        <div class="logo-text">DWMS</div>
+      </div>
+    </div>
+    <div class="logo-sub">DUBAI WATER MGMT SYS · v4.2</div>
+  </div>
+  <div class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="showSection('overview')">
+      <span class="nav-icon">⊞</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showSection('map')">
+      <span class="nav-icon">◉</span> Interactive Map
+    </div>
+
+    <div class="nav-section" style="margin-top:8px">Operations</div>
+    <div class="nav-item" onclick="showSection('plants')">
+      <span class="nav-icon">🏭</span> Plant Management
+    </div>
+    <div class="nav-item" onclick="showSection('controls')">
+      <span class="nav-icon">⚙</span> Remote Controls
+    </div>
+    <div class="nav-item" onclick="showSection('sensors')">
+      <span class="nav-icon">📡</span> Sensor & IoT
+    </div>
+
+    <div class="nav-section" style="margin-top:8px">Monitoring</div>
+    <div class="nav-item" onclick="showSection('alerts')">
+      <span class="nav-icon">🔔</span> Alerts
+      <span class="nav-badge">7</span>
+    </div>
+    <div class="nav-item" onclick="showSection('maintenance')">
+      <span class="nav-icon">🔧</span> Maintenance
+      <span class="nav-badge gold">3</span>
+    </div>
+
+    <div class="nav-section" style="margin-top:8px">Intelligence</div>
+    <div class="nav-item" onclick="showSection('analytics')">
+      <span class="nav-icon">📊</span> Analytics
+    </div>
+    <div class="nav-item" onclick="showSection('predictive')">
+      <span class="nav-icon">🤖</span> AI Predictions
+    </div>
+
+    <div class="nav-section" style="margin-top:8px">Admin</div>
+    <div class="nav-item" onclick="showSection('users')">
+      <span class="nav-icon">👤</span> User Management
+    </div>
+    <div class="nav-item" onclick="showSection('smart')">
+      <span class="nav-icon">🏘</span> Smart Meters
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sys-time" id="sysTime">--:--:--</div>
+    <div>Dubai, UAE · GST +4</div>
+    <div style="margin-top:4px; display:flex; align-items:center; gap:5px;">
+      <span class="dot"></span> SCADA ONLINE
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">OVERVIEW <span>/ DASHBOARD</span></div>
+    <div class="topbar-divider"></div>
+    <div class="status-pill"><span class="dot"></span> ALL SYSTEMS NOMINAL</div>
+    <button class="topbar-btn ghost" onclick="showToast('Report exported successfully!','success')">⬇ Export</button>
+    <button class="topbar-btn primary" onclick="openModal('plant1')">+ Add Plant</button>
+    <div class="avatar" title="Admin User">AK</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ==================== OVERVIEW ==================== -->
+    <div class="section active" id="sec-overview">
+
+      <!-- Summary Row -->
+      <div class="summary-row">
+        <div class="summary-block">
+          <div class="summary-icon cyan">🏭</div>
+          <div class="summary-body">
+            <div class="summary-val cyan">24</div>
+            <div class="summary-lbl">TOTAL PLANTS</div>
+          </div>
+        </div>
+        <div class="summary-block">
+          <div class="summary-icon green">✅</div>
+          <div class="summary-body">
+            <div class="summary-val green">19</div>
+            <div class="summary-lbl">OPERATIONAL</div>
+          </div>
+        </div>
+        <div class="summary-block">
+          <div class="summary-icon orange">🔧</div>
+          <div class="summary-body">
+            <div class="summary-val orange">3</div>
+            <div class="summary-lbl">MAINTENANCE</div>
+          </div>
+        </div>
+        <div class="summary-block">
+          <div class="summary-icon red">⛔</div>
+          <div class="summary-body">
+            <div class="summary-val red">2</div>
+            <div class="summary-lbl">OFFLINE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics Grid -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">💧 Daily Production</div>
+          <div class="metric-value cyan">2.47M</div>
+          <div class="metric-sub"><span class="metric-change up">↑ 3.2%</span> vs yesterday</div>
+        </div>
+        <div class="metric-card green-accent">
+          <div class="metric-label">📈 Monthly Output</div>
+          <div class="metric-value green">74.1M</div>
+          <div class="metric-sub"><span class="metric-change up">↑ 1.8%</span> vs last month · m³</div>
+        </div>
+        <div class="metric-card gold-accent">
+          <div class="metric-label">⚡ Energy Today</div>
+          <div class="metric-value gold">18.3K</div>
+          <div class="metric-sub"><span class="metric-change down">↑ 5.1%</span> MWh consumed</div>
+        </div>
+        <div class="metric-card red-accent">
+          <div class="metric-label">🔔 Active Alerts</div>
+          <div class="metric-value red">7</div>
+          <div class="metric-sub">2 critical · 3 high · 2 medium</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🏙 Supply vs Demand</div>
+          <div class="metric-value cyan">94.7%</div>
+          <div class="metric-sub">Coverage ratio · healthy</div>
+        </div>
+        <div class="metric-card green-accent">
+          <div class="metric-label">♻ Recycled Water</div>
+          <div class="metric-value green">31.2%</div>
+          <div class="metric-sub"><span class="metric-change up">↑ 2.1%</span> of total supply</div>
+        </div>
+        <div class="metric-card orange-accent">
+          <div class="metric-label">💧 Water Loss</div>
+          <div class="metric-value orange">3.8%</div>
+          <div class="metric-sub">Leak & distribution loss</div>
+        </div>
+        <div class="metric-card gold-accent">
+          <div class="metric-label">🌡 Avg Salinity</div>
+          <div class="metric-value gold">482</div>
+          <div class="metric-sub">ppm · within safe limits</div>
+        </div>
+      </div>
+
+      <!-- Main Panel Grid: Production + Alerts -->
+      <div class="main-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📊</span> WATER PRODUCTION — 7 DAY TREND</div>
+            <div class="panel-actions">
+              <div class="icon-btn" title="Daily">D</div>
+              <div class="icon-btn" title="Weekly" style="border-color:var(--cyan);color:var(--cyan)">W</div>
+              <div class="icon-btn" title="Monthly">M</div>
+            </div>
+          </div>
+          <div class="chart-area">
+            <div style="display:flex;gap:14px;margin-bottom:10px;font-size:11px;">
+              <span style="display:flex;align-items:center;gap:5px;color:var(--cyan)"><span style="display:inline-block;width:12px;height:3px;background:var(--cyan);border-radius:2px"></span>Production</span>
+              <span style="display:flex;align-items:center;gap:5px;color:var(--green)"><span style="display:inline-block;width:12px;height:3px;background:var(--green);border-radius:2px"></span>Demand</span>
+            </div>
+            <svg class="prod-line" viewBox="0 0 500 90" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="prodGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="demGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00e676" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#00e676" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="0" y1="22" x2="500" y2="22" stroke="#1a3a5c" stroke-width="0.5"/>
+              <line x1="0" y1="45" x2="500" y2="45" stroke="#1a3a5c" stroke-width="0.5"/>
+              <line x1="0" y1="68" x2="500" y2="68" stroke="#1a3a5c" stroke-width="0.5"/>
+              <!-- Production area -->
+              <path d="M0,65 L71,55 L142,45 L214,38 L285,50 L357,30 L428,20 L500,25 L500,90 L0,90 Z" fill="url(#prodGrad)"/>
+              <!-- Demand area -->
+              <path d="M0,72 L71,65 L142,58 L214,52 L285,60 L357,45 L428,38 L500,40 L500,90 L0,90 Z" fill="url(#demGrad)"/>
+              <!-- Production line -->
+              <polyline points="0,65 71,55 142,45 214,38 285,50 357,30 428,20 500,25" fill="none" stroke="#00d4ff" stroke-width="2" stroke-linejoin="round"/>
+              <!-- Demand line -->
+              <polyline points="0,72 71,65 142,58 214,52 285,60 357,45 428,38 500,40" fill="none" stroke="#00e676" stroke-width="2" stroke-linejoin="round"/>
+              <!-- Dots -->
+              <circle cx="428" cy="20" r="3" fill="#00d4ff"/>
+              <circle cx="357" cy="30" r="3" fill="#00d4ff"/>
+            </svg>
+            <div class="chart-labels">
+              <div class="chart-label">Mon</div><div class="chart-label">Tue</div>
+              <div class="chart-label">Wed</div><div class="chart-label">Thu</div>
+              <div class="chart-label">Fri</div><div class="chart-label">Sat</div>
+              <div class="chart-label">Sun</div><div class="chart-label">Today</div>
+            </div>
+          </div>
+          <!-- Quick Actions -->
+          <div class="panel-header" style="border-top:1px solid var(--border)">
+            <div class="panel-title"><span class="panel-title-icon">⚡</span> QUICK ACTIONS</div>
+          </div>
+          <div class="quick-actions">
+            <button class="qa-btn green" onclick="showToast('All plants powered on','success')">▶ Power All Plants</button>
+            <button class="qa-btn red" onclick="showToast('Emergency shutdown initiated!','critical')">⛔ Emergency Shutdown</button>
+            <button class="qa-btn orange" onclick="showSection('maintenance')">📅 Schedule Maintenance</button>
+            <button class="qa-btn cyan" onclick="showSection('analytics')">📊 Generate Report</button>
+            <button class="qa-btn cyan" onclick="showSection('map')">🗺 View Network Map</button>
+          </div>
+          <!-- System Health -->
+          <div class="health-row">
+            <div class="health-pill ok"><span class="dot"></span>SCADA</div>
+            <div class="health-pill ok"><span class="dot"></span>IoT SENSORS</div>
+            <div class="health-pill warn"><span class="dot orange"></span>PLANT-07</div>
+            <div class="health-pill bad"><span class="dot red"></span>PLANT-12</div>
+            <div class="health-pill ok"><span class="dot"></span>NETWORK</div>
+            <div class="health-pill ok"><span class="dot"></span>DATABASE</div>
+          </div>
+        </div>
+
+        <!-- Alerts Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">🔔</span> LIVE ALERTS</div>
+            <div class="panel-actions">
+              <div class="icon-btn">⟳</div>
+            </div>
+          </div>
+          <div class="alerts-list">
+            <div class="alert-item" onclick="openModal('plant12')">
+              <div class="alert-sev critical"></div>
+              <div class="alert-body">
+                <div class="alert-title">Plant-12 Complete Failure</div>
+                <div class="alert-meta"><span>Jebel Ali District</span><span>2 min ago</span></div>
+              </div>
+              <div class="alert-badge critical">CRITICAL</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-sev critical"></div>
+              <div class="alert-body">
+                <div class="alert-title">Pressure Drop — Zone B Pipeline</div>
+                <div class="alert-meta"><span>Deira Network</span><span>11 min ago</span></div>
+              </div>
+              <div class="alert-badge critical">CRITICAL</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-sev high"></div>
+              <div class="alert-body">
+                <div class="alert-title">High Energy Usage — Plant-07</div>
+                <div class="alert-meta"><span>Al Quoz</span><span>28 min ago</span></div>
+              </div>
+              <div class="alert-badge high">HIGH</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-sev high"></div>
+              <div class="alert-body">
+                <div class="alert-title">Salinity Spike Detected</div>
+                <div class="alert-meta"><span>Plant-03 Desalination</span><span>45 min ago</span></div>
+              </div>
+              <div class="alert-badge high">HIGH</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-sev high"></div>
+              <div class="alert-body">
+                <div class="alert-title">Maintenance Overdue — Plant-09</div>
+                <div class="alert-meta"><span>Downtown Dubai</span><span>2 hr ago</span></div>
+              </div>
+              <div class="alert-badge high">HIGH</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-sev medium"></div>
+              <div class="alert-body">
+                <div class="alert-title">Low Tank Level — Reservoir R4</div>
+                <div class="alert-meta"><span>Dubai Marina</span><span>3 hr ago</span></div>
+              </div>
+              <div class="alert-badge medium">MEDIUM</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-sev medium"></div>
+              <div class="alert-body">
+                <div class="alert-title">Flow Rate Anomaly — Sensor 22</div>
+                <div class="alert-meta"><span>Jumeirah</span><span>4 hr ago</span></div>
+              </div>
+              <div class="alert-badge medium">MEDIUM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid -->
+      <div class="bottom-grid">
+        <!-- Plant Type Donut -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">🥧</span> PLANT TYPES</div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" width="110" height="110" viewBox="0 0 110 110">
+              <circle cx="55" cy="55" r="40" fill="none" stroke="#1a3a5c" stroke-width="18"/>
+              <circle cx="55" cy="55" r="40" fill="none" stroke="#00d4ff" stroke-width="18"
+                stroke-dasharray="138 113" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+              <circle cx="55" cy="55" r="40" fill="none" stroke="#00e676" stroke-width="18"
+                stroke-dasharray="75 176" stroke-dashoffset="-138" transform="rotate(-90 55 55)"/>
+              <circle cx="55" cy="55" r="40" fill="none" stroke="#f0a500" stroke-width="18"
+                stroke-dasharray="38 213" stroke-dashoffset="-213" transform="rotate(-90 55 55)"/>
+              <text x="55" y="52" text-anchor="middle" fill="#e0f4ff" font-size="14" font-weight="700" font-family="Rajdhani">24</text>
+              <text x="55" y="65" text-anchor="middle" fill="#4a7a9b" font-size="8" font-family="IBM Plex Mono">PLANTS</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="donut-leg-item">
+                <div class="donut-leg-dot" style="background:var(--cyan)"></div>
+                <div class="donut-leg-label">Desalination</div>
+                <div class="donut-leg-val">11</div>
+              </div>
+              <div class="donut-leg-item">
+                <div class="donut-leg-dot" style="background:var(--green)"></div>
+                <div class="donut-leg-label">Recycling</div>
+                <div class="donut-leg-val">8</div>
+              </div>
+              <div class="donut-leg-item">
+                <div class="donut-leg-dot" style="background:var(--gold)"></div>
+                <div class="donut-leg-label">Groundwater</div>
+                <div class="donut-leg-val">5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Energy by Plant -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">⚡</span> ENERGY — TOP 7</div>
+          </div>
+          <div class="chart-area">
+            <div class="mini-chart">
+              <div class="bar cyan" style="height:85%" title="Plant-01"></div>
+              <div class="bar cyan" style="height:72%"></div>
+              <div class="bar cyan" style="height:91%"></div>
+              <div class="bar green" style="height:55%"></div>
+              <div class="bar green" style="height:63%"></div>
+              <div class="bar cyan" style="height:48%"></div>
+              <div class="bar green" style="height:77%"></div>
+            </div>
+            <div class="chart-labels">
+              <div class="chart-label">P01</div><div class="chart-label">P03</div>
+              <div class="chart-label">P07</div><div class="chart-label">P09</div>
+              <div class="chart-label">P11</div><div class="chart-label">P14</div>
+              <div class="chart-label">P18</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Efficiency -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📉</span> EFFICIENCY SCORE</div>
+          </div>
+          <div class="chart-area">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Plant Utilization</span>
+                  <span style="color:var(--cyan);font-family:'IBM Plex Mono',monospace">87.3%</span>
+                </div>
+                <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:87.3%;height:100%;background:linear-gradient(90deg,var(--cyan3),var(--cyan));border-radius:3px"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Recovery Rate</span>
+                  <span style="color:var(--green);font-family:'IBM Plex Mono',monospace">91.2%</span>
+                </div>
+                <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:91.2%;height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:3px"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Network Efficiency</span>
+                  <span style="color:var(--gold);font-family:'IBM Plex Mono',monospace">78.6%</span>
+                </div>
+                <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:78.6%;height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:3px"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Leak Control</span>
+                  <span style="color:var(--orange);font-family:'IBM Plex Mono',monospace">96.2%</span>
+                </div>
+                <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:96.2%;height:100%;background:linear-gradient(90deg,#e65c00,var(--orange));border-radius:3px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== MAP ==================== -->
+    <div class="section" id="sec-map">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">🗺</span> DUBAI PLANT NETWORK MAP</div>
+          <div class="panel-actions">
+            <div class="icon-btn">🔥</div>
+            <div class="icon-btn">⊞</div>
+          </div>
+        </div>
+        <div class="map-filter-bar">
+          <button class="filter-chip active">All Plants</button>
+          <button class="filter-chip">Desalination</button>
+          <button class="filter-chip">Recycling</button>
+          <button class="filter-chip">Groundwater</button>
+          <button class="filter-chip">Operational</button>
+          <button class="filter-chip">Maintenance</button>
+          <button class="filter-chip">Offline</button>
+          <button class="filter-chip">Heatmap</button>
+        </div>
+        <div class="map-container">
+          <svg class="map-svg" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mapBg" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#091524"/>
+                <stop offset="100%" stop-color="#04080f"/>
+              </radialGradient>
+              <radialGradient id="heat1" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ff3d3d" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#ff3d3d" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="heat2" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#f0a500" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#f0a500" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="800" height="450" fill="url(#mapBg)"/>
+
+            <!-- Grid overlay -->
+            <g stroke="#1a3a5c" stroke-width="0.3" opacity="0.5">
+              <line x1="0" y1="90" x2="800" y2="90"/>
+              <line x1="0" y1="180" x2="800" y2="180"/>
+              <line x1="0" y1="270" x2="800" y2="270"/>
+              <line x1="0" y1="360" x2="800" y2="360"/>
+              <line x1="160" y1="0" x2="160" y2="450"/>
+              <line x1="320" y1="0" x2="320" y2="450"/>
+              <line x1="480" y1="0" x2="480" y2="450"/>
+              <line x1="640" y1="0" x2="640" y2="450"/>
+            </g>
+
+            <!-- Dubai coastline approximation -->
+            <path d="M0,200 Q100,180 200,170 Q300,160 400,150 Q500,145 600,140 Q700,135 800,120 L800,450 L0,450 Z"
+              fill="#060f1e" stroke="#1a3a5c" stroke-width="1.5"/>
+            <path d="M0,200 Q100,180 200,170 Q300,160 400,150 Q500,145 600,140 Q700,135 800,120"
+              fill="none" stroke="#007a99" stroke-width="2" opacity="0.6"/>
+            <text x="400" y="100" text-anchor="middle" fill="#1e4570" font-size="11" font-family="IBM Plex Mono">ARABIAN GULF</text>
+
+            <!-- District Labels -->
+            <text x="80" y="220" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">JEBEL ALI</text>
+            <text x="200" y="240" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">AL QUOZ</text>
+            <text x="340" y="230" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">DOWNTOWN</text>
+            <text x="480" y="250" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">DEIRA</text>
+            <text x="620" y="230" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">SHARJAH BORDER</text>
+            <text x="140" y="350" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">DUBAI SOUTH</text>
+            <text x="320" y="360" fill="#2a5a7a" font-size="8" font-family="IBM Plex Mono">AL MAKTOUM</text>
+
+            <!-- Pipelines -->
+            <g stroke="#007a99" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5" fill="none">
+              <path d="M100,290 Q200,270 330,255"/>
+              <path d="M330,255 Q430,245 540,260"/>
+              <path d="M540,260 Q620,265 690,270"/>
+              <path d="M330,255 Q340,300 360,370"/>
+              <path d="M200,290 Q210,330 220,380"/>
+            </g>
+
+            <!-- Heatmap overlays (demand areas) -->
+            <ellipse cx="350" cy="260" rx="80" ry="60" fill="url(#heat1)" opacity="0.6"/>
+            <ellipse cx="520" cy="270" rx="60" ry="50" fill="url(#heat2)" opacity="0.5"/>
+
+            <!-- PLANT MARKERS -->
+            <!-- Operational Green -->
+            <g class="plant-marker" fill="#00e676" onclick="openModal('plant1')" style="cursor:pointer">
+              <circle cx="100" cy="290" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="100" cy="290" r="6" fill="#00e676"/>
+              <circle cx="100" cy="290" r="3" fill="#fff"/>
+              <text x="100" y="308" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-01</text>
+            </g>
+            <g class="plant-marker" fill="#00e676" onclick="openModal('plant2')" style="cursor:pointer">
+              <circle cx="190" cy="280" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="190" cy="280" r="6" fill="#00e676"/>
+              <circle cx="190" cy="280" r="3" fill="#fff"/>
+              <text x="190" y="298" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-03</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer" onclick="openModal('plant3')">
+              <circle cx="290" cy="265" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="290" cy="265" r="6" fill="#00e676"/>
+              <circle cx="290" cy="265" r="3" fill="#fff"/>
+              <text x="290" y="283" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-05</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer" onclick="openModal('plant4')">
+              <circle cx="370" cy="255" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="370" cy="255" r="6" fill="#00e676"/>
+              <circle cx="370" cy="255" r="3" fill="#fff"/>
+              <text x="370" y="273" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-06</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer" onclick="openModal('plant5')">
+              <circle cx="480" cy="260" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="480" cy="260" r="6" fill="#00e676"/>
+              <circle cx="480" cy="260" r="3" fill="#fff"/>
+              <text x="480" y="278" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-09</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer">
+              <circle cx="570" cy="265" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="570" cy="265" r="6" fill="#00e676"/>
+              <circle cx="570" cy="265" r="3" fill="#fff"/>
+              <text x="570" y="283" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-11</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer">
+              <circle cx="660" cy="270" r="10" fill="#00e676" opacity="0.2"/>
+              <circle cx="660" cy="270" r="6" fill="#00e676"/>
+              <circle cx="660" cy="270" r="3" fill="#fff"/>
+              <text x="660" y="288" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-14</text>
+            </g>
+            <!-- Maintenance Orange -->
+            <g class="plant-marker" style="cursor:pointer;fill:#ff9800" onclick="openModal('plant7')">
+              <circle cx="240" cy="270" r="10" fill="#ff9800" opacity="0.2"/>
+              <circle cx="240" cy="270" r="6" fill="#ff9800"/>
+              <circle cx="240" cy="270" r="3" fill="#fff"/>
+              <text x="240" y="288" text-anchor="middle" fill="#ff9800" font-size="7" font-family="IBM Plex Mono">P-07</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer;fill:#ff9800">
+              <circle cx="430" cy="260" r="10" fill="#ff9800" opacity="0.2"/>
+              <circle cx="430" cy="260" r="6" fill="#ff9800"/>
+              <circle cx="430" cy="260" r="3" fill="#fff"/>
+              <text x="430" y="278" text-anchor="middle" fill="#ff9800" font-size="7" font-family="IBM Plex Mono">P-08</text>
+            </g>
+            <!-- Offline Red -->
+            <g class="plant-marker" style="cursor:pointer;fill:#ff3d3d" onclick="openModal('plant12')">
+              <circle cx="340" cy="258" r="12" fill="#ff3d3d" opacity="0.25"/>
+              <circle cx="340" cy="258" r="7" fill="#ff3d3d"/>
+              <circle cx="340" cy="258" r="3" fill="#fff"/>
+              <text x="340" y="278" text-anchor="middle" fill="#ff3d3d" font-size="7" font-family="IBM Plex Mono">P-12 ⚠</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer;fill:#ff3d3d">
+              <circle cx="620" cy="268" r="12" fill="#ff3d3d" opacity="0.25"/>
+              <circle cx="620" cy="268" r="7" fill="#ff3d3d"/>
+              <circle cx="620" cy="268" r="3" fill="#fff"/>
+              <text x="620" y="288" text-anchor="middle" fill="#ff3d3d" font-size="7" font-family="IBM Plex Mono">P-19</text>
+            </g>
+            <!-- Some more operational -->
+            <g class="plant-marker" style="cursor:pointer;fill:#00e676">
+              <circle cx="150" cy="360" r="6" fill="#00e676" opacity="0.8"/>
+              <circle cx="150" cy="360" r="3" fill="#fff"/>
+              <text x="150" y="375" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-02</text>
+            </g>
+            <g class="plant-marker" style="cursor:pointer;fill:#00e676">
+              <circle cx="360" cy="370" r="6" fill="#00e676" opacity="0.8"/>
+              <circle cx="360" cy="370" r="3" fill="#fff"/>
+              <text x="360" y="385" text-anchor="middle" fill="#00e676" font-size="7" font-family="IBM Plex Mono">P-04</text>
+            </g>
+
+            <!-- Reservoirs -->
+            <rect x="310" y="290" width="20" height="12" rx="2" fill="none" stroke="#007a99" stroke-width="1.5" opacity="0.7"/>
+            <text x="320" y="318" text-anchor="middle" fill="#007a99" font-size="7" font-family="IBM Plex Mono">R-1</text>
+            <rect x="500" y="295" width="20" height="12" rx="2" fill="none" stroke="#007a99" stroke-width="1.5" opacity="0.7"/>
+            <text x="510" y="323" text-anchor="middle" fill="#007a99" font-size="7" font-family="IBM Plex Mono">R-2</text>
+
+            <!-- Compass -->
+            <g transform="translate(750,30)">
+              <circle cx="0" cy="0" r="18" fill="rgba(6,13,24,0.8)" stroke="#1a3a5c"/>
+              <text x="0" y="-5" text-anchor="middle" fill="#00d4ff" font-size="8" font-weight="bold" font-family="Rajdhani">N</text>
+              <polygon points="0,-12 3,0 0,5 -3,0" fill="#00d4ff"/>
+              <polygon points="0,5 3,0 0,12 -3,0" fill="#4a7a9b"/>
+            </g>
+          </svg>
+
+          <div class="map-controls">
+            <div class="map-btn">+</div>
+            <div class="map-btn">−</div>
+            <div class="map-btn">⊙</div>
+            <div class="map-btn">⟳</div>
+          </div>
+
+          <div class="map-legend">
+            <div class="legend-title">PLANT STATUS</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Operational</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Maintenance</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Offline</div>
+            <div style="border-top:1px solid var(--border);margin:6px 0 4px"></div>
+            <div class="legend-item"><div style="width:20px;height:2px;background:var(--cyan3);margin-right:3px;opacity:0.6"></div>Pipeline</div>
+            <div class="legend-item"><div style="width:10px;height:8px;border:1px solid var(--cyan3);border-radius:1px;margin-right:9px"></div>Reservoir</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PLANTS ==================== -->
+    <div class="section" id="sec-plants">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">🏭</span> ALL WATER PLANTS</div>
+          <div class="panel-actions">
+            <input style="background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:5px;font-size:11px;font-family:Rajdhani" placeholder="🔍 Search plants..."/>
+            <div class="icon-btn">⬇</div>
+          </div>
+        </div>
+        <div class="plants-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PLANT ID</th><th>NAME</th><th>TYPE</th><th>DISTRICT</th>
+                <th>CAPACITY</th><th>PRODUCTION</th><th>STATUS</th>
+                <th>LAST MAINT</th><th>OPERATOR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="openModal('plant1')">
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--cyan)">DWP-01</td>
+                <td>Jebel Ali Desal Alpha</td>
+                <td>Desalination</td><td>Jebel Ali</td>
+                <td>320 ML/d</td><td>298 ML/d</td>
+                <td><span class="status-tag operational"><span class="dot" style="width:5px;height:5px"></span>Operational</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">15 Jun 2025</td>
+                <td>Ahmed K.</td>
+              </tr>
+              <tr onclick="openModal('plant3')">
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--cyan)">DWP-03</td>
+                <td>Al Quoz Recycling Ctr</td>
+                <td>Recycling</td><td>Al Quoz</td>
+                <td>180 ML/d</td><td>165 ML/d</td>
+                <td><span class="status-tag operational"><span class="dot" style="width:5px;height:5px"></span>Operational</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">22 Jun 2025</td>
+                <td>Sara M.</td>
+              </tr>
+              <tr onclick="openModal('plant7')">
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--orange)">DWP-07</td>
+                <td>Business Bay Pumping</td>
+                <td>Groundwater</td><td>Business Bay</td>
+                <td>95 ML/d</td><td>0 ML/d</td>
+                <td><span class="status-tag maintenance">⚙ Maintenance</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">01 Jul 2025</td>
+                <td>Khalid R.</td>
+              </tr>
+              <tr onclick="openModal('plant12')">
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--red)">DWP-12</td>
+                <td>Deira Desal Station</td>
+                <td>Desalination</td><td>Deira</td>
+                <td>240 ML/d</td><td>0 ML/d</td>
+                <td><span class="status-tag offline">⛔ Offline</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">10 May 2025</td>
+                <td>Fatima A.</td>
+              </tr>
+              <tr>
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--cyan)">DWP-05</td>
+                <td>Jumeirah Desal West</td>
+                <td>Desalination</td><td>Jumeirah</td>
+                <td>210 ML/d</td><td>195 ML/d</td>
+                <td><span class="status-tag operational"><span class="dot" style="width:5px;height:5px"></span>Operational</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">18 Jun 2025</td>
+                <td>Omar T.</td>
+              </tr>
+              <tr>
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--cyan)">DWP-09</td>
+                <td>Dubai Marina Recycle</td>
+                <td>Recycling</td><td>Dubai Marina</td>
+                <td>130 ML/d</td><td>118 ML/d</td>
+                <td><span class="status-tag operational"><span class="dot" style="width:5px;height:5px"></span>Operational</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">28 Jun 2025</td>
+                <td>Nora H.</td>
+              </tr>
+              <tr>
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--orange)">DWP-08</td>
+                <td>DIFC Groundwater</td>
+                <td>Groundwater</td><td>DIFC</td>
+                <td>80 ML/d</td><td>0 ML/d</td>
+                <td><span class="status-tag maintenance">⚙ Maintenance</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">25 Jun 2025</td>
+                <td>Rashed N.</td>
+              </tr>
+              <tr>
+                <td style="font-family:'IBM Plex Mono',monospace;color:var(--red)">DWP-19</td>
+                <td>Sharjah Border Station</td>
+                <td>Groundwater</td><td>Border Zone</td>
+                <td>60 ML/d</td><td>0 ML/d</td>
+                <td><span class="status-tag offline">⛔ Offline</span></td>
+                <td style="font-family:'IBM Plex Mono',monospace">02 Jun 2025</td>
+                <td>Layla F.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CONTROLS ==================== -->
+    <div class="section" id="sec-controls">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">⚙</span> REMOTE PLANT CONTROLS</div>
+          </div>
+          <div class="controls-grid">
+            <div class="control-card">
+              <div class="control-name">DWP-01 · Jebel Ali Alpha</div>
+              <div class="control-loc">📍 Jebel Ali District</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Power</span>
+                <label class="toggle">
+                  <input type="checkbox" checked onchange="showToast('DWP-01 power toggled','success')"/>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-knob"></div>
+                </label>
+              </div>
+              <div class="mode-select">
+                <button class="mode-btn active">FULL</button>
+                <button class="mode-btn">HALF</button>
+                <button class="mode-btn">STBY</button>
+              </div>
+            </div>
+            <div class="control-card">
+              <div class="control-name">DWP-03 · Al Quoz Recycle</div>
+              <div class="control-loc">📍 Al Quoz Industrial</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Power</span>
+                <label class="toggle">
+                  <input type="checkbox" checked onchange="showToast('DWP-03 power toggled','success')"/>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-knob"></div>
+                </label>
+              </div>
+              <div class="mode-select">
+                <button class="mode-btn active">FULL</button>
+                <button class="mode-btn">HALF</button>
+                <button class="mode-btn">STBY</button>
+              </div>
+            </div>
+            <div class="control-card">
+              <div class="control-name">DWP-07 · Business Bay</div>
+              <div class="control-loc">📍 Business Bay · MAINT</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Power</span>
+                <label class="toggle">
+                  <input type="checkbox" onchange="showToast('DWP-07 toggled','success')"/>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-knob"></div>
+                </label>
+              </div>
+              <div class="mode-select">
+                <button class="mode-btn">FULL</button>
+                <button class="mode-btn">HALF</button>
+                <button class="mode-btn active">STBY</button>
+              </div>
+            </div>
+            <div class="control-card">
+              <div class="control-name">DWP-09 · Dubai Marina</div>
+              <div class="control-loc">📍 Dubai Marina District</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Power</span>
+                <label class="toggle">
+                  <input type="checkbox" checked onchange="showToast('DWP-09 toggled','success')"/>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-knob"></div>
+                </label>
+              </div>
+              <div class="mode-select">
+                <button class="mode-btn">FULL</button>
+                <button class="mode-btn active">HALF</button>
+                <button class="mode-btn">STBY</button>
+              </div>
+            </div>
+            <div class="control-card">
+              <div class="control-name">DWP-05 · Jumeirah West</div>
+              <div class="control-loc">📍 Jumeirah Beach Road</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Power</span>
+                <label class="toggle">
+                  <input type="checkbox" checked onchange="showToast('DWP-05 toggled','success')"/>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-knob"></div>
+                </label>
+              </div>
+              <div class="mode-select">
+                <button class="mode-btn active">FULL</button>
+                <button class="mode-btn">HALF</button>
+                <button class="mode-btn">STBY</button>
+              </div>
+            </div>
+            <div class="control-card" style="border-color:rgba(255,61,61,0.3)">
+              <div class="control-name" style="color:var(--red)">DWP-12 · Deira Station</div>
+              <div class="control-loc">📍 Deira · OFFLINE</div>
+              <div class="toggle-row">
+                <span class="toggle-label">Power</span>
+                <label class="toggle">
+                  <input type="checkbox" onchange="showToast('DWP-12 restart initiated','critical')"/>
+                  <div class="toggle-track"></div>
+                  <div class="toggle-knob"></div>
+                </label>
+              </div>
+              <div class="mode-select">
+                <button class="mode-btn">FULL</button>
+                <button class="mode-btn">HALF</button>
+                <button class="mode-btn">STBY</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">🔐</span> EMERGENCY CONTROLS</div>
+          </div>
+          <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+            <div style="background:rgba(255,61,61,0.05);border:1px solid rgba(255,61,61,0.2);border-radius:8px;padding:14px">
+              <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px">⚠ EMERGENCY SHUTDOWN</div>
+              <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5">Immediately halts all plant operations. Requires supervisor authorization code.</div>
+              <button class="action-btn danger" style="width:100%" onclick="showToast('Auth required for emergency shutdown','critical')">🛑 Initiate Emergency Shutdown</button>
+            </div>
+            <div style="background:rgba(0,230,118,0.04);border:1px solid rgba(0,230,118,0.15);border-radius:8px;padding:14px">
+              <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px">▶ SYSTEM RESTART</div>
+              <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5">Restart all offline/fault plants in safe sequence with staggered startup.</div>
+              <button class="action-btn primary" style="width:100%" onclick="showToast('System restart sequence initiated','success')">⟳ Restart All Systems</button>
+            </div>
+            <div style="background:rgba(255,152,0,0.04);border:1px solid rgba(255,152,0,0.15);border-radius:8px;padding:14px">
+              <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px">📅 SCHEDULE DOWNTIME</div>
+              <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5">Plan a coordinated maintenance window without disrupting water supply.</div>
+              <button class="action-btn warning" style="width:100%" onclick="showToast('Maintenance window scheduled','success')">📆 Plan Maintenance Window</button>
+            </div>
+            <div style="background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.1);border-radius:8px;padding:14px">
+              <div style="font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:6px">🔒 ACCESS LOCK</div>
+              <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5">Lock all remote control interfaces to prevent unauthorized operations.</div>
+              <button class="action-btn ghost" style="width:100%" onclick="showToast('All controls locked','success')">🔐 Lock All Controls</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SENSORS ==================== -->
+    <div class="section" id="sec-sensors">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📡</span> LIVE SENSOR READINGS — DWP-01</div>
+            <div class="panel-actions"><span class="dot" style="width:7px;height:7px"></span></div>
+          </div>
+          <div class="sensors-grid">
+            <div class="sensor-tile">
+              <div class="sensor-name">FLOW RATE</div>
+              <div class="sensor-val">3.42</div>
+              <div class="sensor-unit">m³/s</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:78%;background:var(--cyan)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">TANK LEVEL</div>
+              <div class="sensor-val">84</div>
+              <div class="sensor-unit">% full</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:84%;background:var(--green)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">PRESSURE</div>
+              <div class="sensor-val">6.2</div>
+              <div class="sensor-unit">bar</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:62%;background:var(--cyan)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">TEMP</div>
+              <div class="sensor-val">38</div>
+              <div class="sensor-unit">°C</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:55%;background:var(--orange)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">SALINITY</div>
+              <div class="sensor-val">478</div>
+              <div class="sensor-unit">ppm</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:48%;background:var(--gold)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">ENERGY</div>
+              <div class="sensor-val">2.1</div>
+              <div class="sensor-unit">MWh</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:67%;background:var(--gold)"></div></div>
+            </div>
+          </div>
+          <div style="padding:10px 14px;border-top:1px solid var(--border)">
+            <div style="font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--text3);letter-spacing:1px;margin-bottom:6px">LIVE FLOW WAVEFORM</div>
+            <svg width="100%" height="50" viewBox="0 0 400 50">
+              <path d="M0,25 Q20,10 40,25 Q60,40 80,25 Q100,10 120,20 Q140,30 160,15 Q180,5 200,25 Q220,40 240,28 Q260,15 280,22 Q300,30 320,18 Q340,8 360,25 Q380,38 400,22" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📡</span> LIVE SENSOR READINGS — DWP-03</div>
+            <div class="panel-actions"><span class="dot" style="width:7px;height:7px"></span></div>
+          </div>
+          <div class="sensors-grid">
+            <div class="sensor-tile">
+              <div class="sensor-name">FLOW RATE</div>
+              <div class="sensor-val">2.18</div>
+              <div class="sensor-unit">m³/s</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:55%;background:var(--cyan)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">TANK LEVEL</div>
+              <div class="sensor-val">71</div>
+              <div class="sensor-unit">% full</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:71%;background:var(--green)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">PRESSURE</div>
+              <div class="sensor-val">5.8</div>
+              <div class="sensor-unit">bar</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:58%;background:var(--cyan)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">TEMP</div>
+              <div class="sensor-val">35</div>
+              <div class="sensor-unit">°C</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:50%;background:var(--orange)"></div></div>
+            </div>
+            <div class="sensor-tile" style="border-color:rgba(255,61,61,0.4)">
+              <div class="sensor-name" style="color:var(--red)">SALINITY ⚠</div>
+              <div class="sensor-val" style="color:var(--red)">612</div>
+              <div class="sensor-unit">ppm · HIGH</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:85%;background:var(--red)"></div></div>
+            </div>
+            <div class="sensor-tile">
+              <div class="sensor-name">ENERGY</div>
+              <div class="sensor-val">1.7</div>
+              <div class="sensor-unit">MWh</div>
+              <div class="sensor-bar-track"><div class="sensor-bar-fill" style="width:52%;background:var(--gold)"></div></div>
+            </div>
+          </div>
+          <div style="padding:10px 14px;border-top:1px solid var(--border)">
+            <div style="font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--text3);letter-spacing:1px;margin-bottom:6px">LIVE FLOW WAVEFORM</div>
+            <svg width="100%" height="50" viewBox="0 0 400 50">
+              <path d="M0,30 Q20,15 40,28 Q60,42 80,30 Q100,18 120,25 Q140,33 160,20 Q180,10 200,30 Q220,45 240,32 Q260,18 280,28 Q300,36 320,22 Q340,12 360,28 Q380,40 400,28" fill="none" stroke="#00e676" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ALERTS ==================== -->
+    <div class="section" id="sec-alerts">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">🔔</span> ALERT MANAGEMENT CENTER</div>
+          <div class="panel-actions">
+            <button class="topbar-btn ghost" style="font-size:11px;padding:5px 10px" onclick="showToast('All alerts acknowledged','success')">✓ Acknowledge All</button>
+            <div class="icon-btn">⬇</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border)">
+          <button class="filter-chip active">All (7)</button>
+          <button class="filter-chip">Critical (2)</button>
+          <button class="filter-chip">High (3)</button>
+          <button class="filter-chip">Medium (2)</button>
+          <button class="filter-chip">Low (0)</button>
+          <button class="filter-chip">History</button>
+        </div>
+        <div>
+          <div class="alert-item" onclick="openModal('plant12')" style="padding:14px 16px">
+            <div class="alert-sev critical" style="align-self:stretch"></div>
+            <div class="alert-body">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div class="alert-title">DWP-12 Complete Plant Failure — Deira</div>
+                <div class="alert-badge critical">CRITICAL</div>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Complete loss of water production at Deira Desalination Station. Potential cascade failure risk to Zone B supply.</div>
+              <div class="alert-meta"><span>🕐 2 min ago</span><span>📍 Deira</span><span>👤 Fatima A.</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button class="action-btn danger" style="font-size:10px;padding:5px 10px" onclick="event.stopPropagation();showToast('Plant 12 restart initiated','critical')">Restart</button>
+              <button class="action-btn ghost" style="font-size:10px;padding:5px 10px">Assign</button>
+            </div>
+          </div>
+          <div class="alert-item" style="padding:14px 16px">
+            <div class="alert-sev critical" style="align-self:stretch"></div>
+            <div class="alert-body">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div class="alert-title">Pressure Drop — Zone B Distribution Pipeline</div>
+                <div class="alert-badge critical">CRITICAL</div>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Pressure reading 3.1 bar below threshold. Possible pipe rupture or major leak detected at Deira network node 4B.</div>
+              <div class="alert-meta"><span>🕐 11 min ago</span><span>📍 Deira Network</span><span>👤 System Auto</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button class="action-btn danger" style="font-size:10px;padding:5px 10px" onclick="event.stopPropagation();showToast('Inspection team dispatched','success')">Dispatch</button>
+              <button class="action-btn ghost" style="font-size:10px;padding:5px 10px">Assign</button>
+            </div>
+          </div>
+          <div class="alert-item" style="padding:14px 16px">
+            <div class="alert-sev high" style="align-self:stretch"></div>
+            <div class="alert-body">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div class="alert-title">Abnormal Energy Consumption — DWP-07</div>
+                <div class="alert-badge high">HIGH</div>
+              </div>
+              <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Energy usage 34% above normal operating levels. Possible pump inefficiency or electrical fault.</div>
+              <div class="alert-meta"><span>🕐 28 min ago</span><span>📍 Al Quoz</span><span>👤 Khalid R.</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <button class="action-btn warning" style="font-size:10px;padding:5px 10px">Inspect</button>
+              <button class="action-btn ghost" style="font-size:10px;padding:5px 10px">Dismiss</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MAINTENANCE ==================== -->
+    <div class="section" id="sec-maintenance">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">🔧</span> MAINTENANCE SCHEDULE</div>
+            <div class="panel-actions">
+              <button class="topbar-btn primary" style="font-size:11px;padding:5px 12px" onclick="showToast('Task created','success')">+ New Task</button>
+            </div>
+          </div>
+          <div class="maintenance-list">
+            <div class="maint-item">
+              <div class="maint-icon overdue">⚠</div>
+              <div class="maint-body">
+                <div class="maint-name">Full Pump Overhaul — DWP-09</div>
+                <div class="maint-meta">Downtown Dubai · Technician: Mohammed A.</div>
+              </div>
+              <div class="maint-date" style="color:var(--red)">OVERDUE<br/>01 Jul 2025</div>
+            </div>
+            <div class="maint-item">
+              <div class="maint-icon overdue">⚠</div>
+              <div class="maint-body">
+                <div class="maint-name">Filter Replacement — DWP-03</div>
+                <div class="maint-meta">Al Quoz · Technician: Sara M.</div>
+              </div>
+              <div class="maint-date" style="color:var(--orange)">OVERDUE<br/>03 Jul 2025</div>
+            </div>
+            <div class="maint-item">
+              <div class="maint-icon overdue">⚠</div>
+              <div class="maint-body">
+                <div class="maint-name">Sensor Calibration — DWP-14</div>
+                <div class="maint-meta">Deira · Technician: Unassigned</div>
+              </div>
+              <div class="maint-date" style="color:var(--orange)">OVERDUE<br/>05 Jul 2025</div>
+            </div>
+            <div class="maint-item">
+              <div class="maint-icon scheduled">📅</div>
+              <div class="maint-body">
+                <div class="maint-name">Annual Inspection — DWP-01</div>
+                <div class="maint-meta">Jebel Ali · Technician: Ahmed K.</div>
+              </div>
+              <div class="maint-date">10 Jul 2025</div>
+            </div>
+            <div class="maint-item">
+              <div class="maint-icon scheduled">📅</div>
+              <div class="maint-body">
+                <div class="maint-name">Membrane Cleaning — DWP-05</div>
+                <div class="maint-meta">Jumeirah · Technician: Omar T.</div>
+              </div>
+              <div class="maint-date">12 Jul 2025</div>
+            </div>
+            <div class="maint-item">
+              <div class="maint-icon done">✅</div>
+              <div class="maint-body">
+                <div class="maint-name">Control Panel Upgrade — DWP-07</div>
+                <div class="maint-meta">Business Bay · Technician: Khalid R.</div>
+              </div>
+              <div class="maint-date" style="color:var(--green)">DONE<br/>01 Jul 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">🤖</span> AI MAINTENANCE INSIGHTS</div>
+            <div><span class="ai-tag">✨ AI</span></div>
+          </div>
+          <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+            <div style="background:var(--bg3);border:1px solid rgba(255,152,0,0.2);border-radius:8px;padding:12px">
+              <div style="font-size:10px;color:var(--orange);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">⚠ PREDICTED FAILURE — 14 DAYS</div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:4px">DWP-11 Pump Bearing Degradation</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.5">Vibration sensor data indicates 78% probability of pump bearing failure within 14 days. Recommend preventive replacement during next maintenance window.</div>
+              <div style="margin-top:8px"><button class="action-btn warning" style="font-size:10px;padding:5px 12px" onclick="showToast('Task scheduled for DWP-11','success')">Schedule Now</button></div>
+            </div>
+            <div style="background:var(--bg3);border:1px solid rgba(0,212,255,0.15);border-radius:8px;padding:12px">
+              <div style="font-size:10px;color:var(--cyan);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">💡 OPTIMIZATION SUGGESTION</div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:4px">Energy Reduction — DWP-01 Pumps</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.5">Off-peak operation shift between 02:00–05:00 can reduce energy costs by est. 18% without impacting output.</div>
+            </div>
+            <div style="background:var(--bg3);border:1px solid rgba(0,230,118,0.15);border-radius:8px;padding:12px">
+              <div style="font-size:10px;color:var(--green);font-family:'IBM Plex Mono',monospace;margin-bottom:4px">✅ NEXT OPTIMAL WINDOW</div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:4px">Desalination Membrane — DWP-05</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.5">Based on production forecasts and demand patterns, 14–16 July 2025 is the lowest-impact maintenance window.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ANALYTICS ==================== -->
+    <div class="section" id="sec-analytics">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📊</span> MONTHLY PRODUCTION</div>
+          </div>
+          <div class="chart-area">
+            <div class="mini-chart" style="height:140px">
+              <div class="bar cyan" style="height:72%"></div>
+              <div class="bar cyan" style="height:81%"></div>
+              <div class="bar cyan" style="height:68%"></div>
+              <div class="bar cyan" style="height:90%"></div>
+              <div class="bar cyan" style="height:75%"></div>
+              <div class="bar green" style="height:85%"></div>
+              <div class="bar green" style="height:92%"></div>
+              <div class="bar green" style="height:88%"></div>
+              <div class="bar cyan" style="height:78%"></div>
+              <div class="bar green" style="height:95%"></div>
+              <div class="bar cyan" style="height:82%"></div>
+              <div class="bar cyan" style="height:100%"></div>
+            </div>
+            <div class="chart-labels">
+              <div class="chart-label">JAN</div><div class="chart-label">FEB</div>
+              <div class="chart-label">MAR</div><div class="chart-label">APR</div>
+              <div class="chart-label">MAY</div><div class="chart-label">JUN</div>
+              <div class="chart-label">JUL</div><div class="chart-label">AUG</div>
+              <div class="chart-label">SEP</div><div class="chart-label">OCT</div>
+              <div class="chart-label">NOV</div><div class="chart-label">DEC</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">💧</span> WATER LOSS ANALYSIS</div>
+          </div>
+          <div class="chart-area">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Pipeline Leakage</span>
+                  <span style="color:var(--red);font-family:'IBM Plex Mono',monospace">2.1%</span>
+                </div>
+                <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:2.1%;height:100%;background:var(--red);border-radius:3px;min-width:20px"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Evaporation Loss</span>
+                  <span style="color:var(--orange);font-family:'IBM Plex Mono',monospace">0.8%</span>
+                </div>
+                <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:8%;height:100%;background:var(--orange);border-radius:3px"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+                  <span style="color:var(--text2)">Distribution Loss</span>
+                  <span style="color:var(--yellow);font-family:'IBM Plex Mono',monospace">0.9%</span>
+                </div>
+                <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+                  <div style="width:9%;height:100%;background:var(--yellow);border-radius:3px"></div>
+                </div>
+              </div>
+              <div style="margin-top:6px;padding-top:10px;border-top:1px solid var(--border)">
+                <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700">
+                  <span>Total Water Loss</span>
+                  <span style="color:var(--orange)">3.8%</span>
+                </div>
+                <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:'IBM Plex Mono',monospace">TARGET: &lt;3.5% · EXCEED THRESHOLD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">📤</span> REPORT EXPORT</div>
+        </div>
+        <div style="padding:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="qa-btn cyan" onclick="showToast('PDF report exported','success')">📄 Export PDF Report</button>
+          <button class="qa-btn cyan" onclick="showToast('Excel data exported','success')">📊 Export Excel Data</button>
+          <button class="qa-btn cyan" onclick="showToast('Generating maintenance report...','success')">🔧 Maintenance Report</button>
+          <button class="qa-btn cyan" onclick="showToast('Leak detection report generated','success')">💧 Leak Detection Report</button>
+          <button class="qa-btn cyan" onclick="showToast('Energy analysis exported','success')">⚡ Energy Analysis</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PREDICTIVE ==================== -->
+    <div class="section" id="sec-predictive">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">🤖</span> AI-POWERED PREDICTIONS</div>
+          <div><span class="ai-tag">✨ Powered by ML</span></div>
+        </div>
+        <div class="prediction-cards">
+          <div class="pred-card">
+            <div class="pred-label">💧 DEMAND FORECAST — NEXT 7 DAYS <span class="ai-tag">AI</span></div>
+            <div class="pred-val" style="color:var(--cyan)">2.61M</div>
+            <div class="pred-desc">m³/day projected — 5.7% increase expected due to seasonal heat spike. Recommend activating DWP-08 standby.</div>
+          </div>
+          <div class="pred-card">
+            <div class="pred-label">🔧 MAINTENANCE PREDICTION <span class="ai-tag">AI</span></div>
+            <div class="pred-val" style="color:var(--orange)">3 Plants</div>
+            <div class="pred-desc">DWP-11, DWP-16, DWP-22 showing early indicators of mechanical stress within next 30 days.</div>
+          </div>
+          <div class="pred-card">
+            <div class="pred-label">💧 LEAK PROBABILITY <span class="ai-tag">AI</span></div>
+            <div class="pred-val" style="color:var(--red)">HIGH</div>
+            <div class="pred-desc">Zone B pipeline (Deira) shows 73% leak probability based on pressure variance pattern over last 72h.</div>
+          </div>
+          <div class="pred-card">
+            <div class="pred-label">⚡ ENERGY OPTIMIZATION <span class="ai-tag">AI</span></div>
+            <div class="pred-val" style="color:var(--green)">-12.4%</div>
+            <div class="pred-desc">Estimated cost reduction achievable by shifting 4 plants to off-peak night operation cycles.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== USERS ==================== -->
+    <div class="section" id="sec-users">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">👤</span> USER & ROLE MANAGEMENT</div>
+          <div class="panel-actions">
+            <button class="topbar-btn primary" style="font-size:11px;padding:5px 12px" onclick="showToast('Invite sent','success')">+ Invite User</button>
+          </div>
+        </div>
+        <div class="user-list">
+          <div class="user-item">
+            <div class="user-avatar admin">AK</div>
+            <div class="user-info">
+              <div class="user-name">Ahmed Al-Kaabi</div>
+              <div class="user-email">ahmed.alkaabi@dm.gov.ae · Last login: Today</div>
+            </div>
+            <div class="role-badge admin">Admin</div>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar admin">FJ</div>
+            <div class="user-info">
+              <div class="user-name">Fatima Jaber</div>
+              <div class="user-email">fatima.jaber@dm.gov.ae · Last login: Today</div>
+            </div>
+            <div class="role-badge admin">Admin</div>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar engineer">KR</div>
+            <div class="user-info">
+              <div class="user-name">Khalid Rahman</div>
+              <div class="user-email">khalid.r@dwms.ae · Plant: DWP-07, 08</div>
+            </div>
+            <div class="role-badge engineer">Engineer</div>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar engineer">SM</div>
+            <div class="user-info">
+              <div class="user-name">Sara Mohammed</div>
+              <div class="user-email">sara.m@dwms.ae · Plant: DWP-03</div>
+            </div>
+            <div class="role-badge engineer">Engineer</div>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar engineer">OT</div>
+            <div class="user-info">
+              <div class="user-name">Omar Talib</div>
+              <div class="user-email">omar.t@dwms.ae · Plant: DWP-05, 09</div>
+            </div>
+            <div class="role-badge engineer">Engineer</div>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar viewer">NH</div>
+            <div class="user-info">
+              <div class="user-name">Nora Hassan</div>
+              <div class="user-email">nora.h@rta.ae · Analytics access only</div>
+            </div>
+            <div class="role-badge viewer">Viewer</div>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar viewer">MK</div>
+            <div class="user-info">
+              <div class="user-name">Mohammed Khoury</div>
+              <div class="user-email">m.khoury@cityplanning.ae · Read-only</div>
+            </div>
+            <div class="role-badge viewer">Viewer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SMART METERS ==================== -->
+    <div class="section" id="sec-smart">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><span class="panel-title-icon">🏘</span> SMART METER DASHBOARD — DISTRICT USAGE</div>
+          <div class="panel-actions">
+            <span style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3)">Live · Updated 30s</span>
+            <span class="dot" style="width:7px;height:7px"></span>
+          </div>
+        </div>
+        <div class="meter-grid">
+          <div class="meter-card">
+            <div class="meter-district">Downtown Dubai</div>
+            <div class="meter-usage">4,821</div>
+            <div class="meter-unit">m³/hr · NORMAL</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill normal" style="width:62%"></div></div>
+          </div>
+          <div class="meter-card">
+            <div class="meter-district">Dubai Marina</div>
+            <div class="meter-usage">3,204</div>
+            <div class="meter-unit">m³/hr · NORMAL</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill normal" style="width:51%"></div></div>
+          </div>
+          <div class="meter-card" style="border-color:rgba(255,152,0,0.3)">
+            <div class="meter-district">Deira</div>
+            <div class="meter-usage" style="color:var(--orange)">7,942</div>
+            <div class="meter-unit" style="color:var(--orange)">m³/hr · HIGH ⚠</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill high" style="width:87%"></div></div>
+          </div>
+          <div class="meter-card">
+            <div class="meter-district">Jumeirah</div>
+            <div class="meter-usage">2,711</div>
+            <div class="meter-unit">m³/hr · NORMAL</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill normal" style="width:44%"></div></div>
+          </div>
+          <div class="meter-card" style="border-color:rgba(255,61,61,0.3)">
+            <div class="meter-district">Jebel Ali</div>
+            <div class="meter-usage" style="color:var(--red)">9,310</div>
+            <div class="meter-unit" style="color:var(--red)">m³/hr · CRITICAL ⚠</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill critical" style="width:97%"></div></div>
+          </div>
+          <div class="meter-card">
+            <div class="meter-district">Al Quoz Industrial</div>
+            <div class="meter-usage">5,182</div>
+            <div class="meter-unit">m³/hr · NORMAL</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill normal" style="width:68%"></div></div>
+          </div>
+          <div class="meter-card">
+            <div class="meter-district">Business Bay</div>
+            <div class="meter-usage">3,874</div>
+            <div class="meter-unit">m³/hr · NORMAL</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill normal" style="width:58%"></div></div>
+          </div>
+          <div class="meter-card" style="border-color:rgba(255,152,0,0.3)">
+            <div class="meter-district">Dubai South</div>
+            <div class="meter-usage" style="color:var(--orange)">6,891</div>
+            <div class="meter-unit" style="color:var(--orange)">m³/hr · HIGH ⚠</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill high" style="width:81%"></div></div>
+          </div>
+          <div class="meter-card">
+            <div class="meter-district">Sharjah Border</div>
+            <div class="meter-usage">1,205</div>
+            <div class="meter-unit">m³/hr · NORMAL</div>
+            <div class="meter-bar-track"><div class="meter-bar-fill normal" style="width:22%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ==================== MODAL ==================== -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Plant Details</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===== TIME =====
+function updateTime() {
+  const now = new Date();
+  document.getElementById('sysTime').textContent = now.toLocaleTimeString('en-GB', {hour12:false});
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// ===== NAV =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+
+  const titles = {
+    overview:'OVERVIEW <span>/ DASHBOARD</span>',
+    map:'INTERACTIVE <span>/ NETWORK MAP</span>',
+    plants:'PLANT <span>/ MANAGEMENT</span>',
+    controls:'REMOTE <span>/ CONTROLS</span>',
+    sensors:'SENSOR <span>/ IoT MONITORING</span>',
+    alerts:'ALERTS <span>/ NOTIFICATIONS</span>',
+    maintenance:'MAINTENANCE <span>/ MANAGEMENT</span>',
+    analytics:'ANALYTICS <span>/ REPORTING</span>',
+    predictive:'AI <span>/ PREDICTIONS</span>',
+    users:'USER <span>/ MANAGEMENT</span>',
+    smart:'SMART <span>/ METERS</span>'
+  };
+  document.getElementById('pageTitle').innerHTML = titles[id] || id.toUpperCase();
+
+  // Mark active nav
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    if(item.getAttribute('onclick') && item.getAttribute('onclick').includes(id)) {
+      item.classList.add('active');
+    }
+  });
+}
+
+// Filter chips interaction
+document.querySelectorAll('.filter-chip, .tab-btn').forEach(chip => {
+  chip.addEventListener('click', function() {
+    const siblings = this.parentElement.querySelectorAll('.filter-chip, .tab-btn');
+    siblings.forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Mode buttons
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const siblings = this.parentElement.querySelectorAll('.mode-btn');
+    siblings.forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ===== MODAL =====
+const plantData = {
+  plant1: {
+    title: 'DWP-01 · Jebel Ali Desal Alpha',
+    fields: [
+      ['Plant ID','DWP-01'],['Type','Desalination (SWRO)'],['District','Jebel Ali'],
+      ['Address','Jebel Ali Free Zone, Section 4'],['Coordinates','25.0330° N, 55.1168° E'],
+      ['Max Capacity','320 ML/day'],['Current Production','298 ML/day'],
+      ['Status','🟢 Operational'],['Last Maintenance','15 Jun 2025'],
+      ['Next Maintenance','10 Jul 2025'],['Plant Manager','Ahmed Al-Kaabi']
+    ],
+    sensors: [
+      ['3.42','m³/s','Flow Rate'],['84%','full','Tank Level'],['6.2','bar','Pressure'],
+      ['38°C','','Temperature'],['478','ppm','Salinity'],['2.1','MWh','Energy']
+    ],
+    status: 'operational'
+  },
+  plant12: {
+    title: 'DWP-12 · Deira Desalination Station',
+    fields: [
+      ['Plant ID','DWP-12'],['Type','Desalination (MED)'],['District','Deira'],
+      ['Address','Al Rigga Industrial Area, Deira'],['Coordinates','25.2582° N, 55.3294° E'],
+      ['Max Capacity','240 ML/day'],['Current Production','0 ML/day'],
+      ['Status','🔴 OFFLINE — FAILURE'],['Last Maintenance','10 May 2025'],
+      ['Next Maintenance','URGENT'],['Plant Manager','Fatima Jaber']
+    ],
+    sensors: [
+      ['0.00','m³/s','Flow Rate'],['12%','full','Tank Level'],['0.0','bar','Pressure'],
+      ['N/A','','Temperature'],['N/A','ppm','Salinity'],['0.0','MWh','Energy']
+    ],
+    status: 'offline'
+  },
+  plant7: {
+    title: 'DWP-07 · Business Bay Pumping Station',
+    fields: [
+      ['Plant ID','DWP-07'],['Type','Groundwater Extraction'],['District','Business Bay'],
+      ['Address','Al Abraj St, Business Bay'],['Coordinates','25.1855° N, 55.2625° E'],
+      ['Max Capacity','95 ML/day'],['Current Production','0 ML/day'],
+      ['Status','🟡 Under Maintenance'],['Last Maintenance','01 Jul 2025'],
+      ['Next Maintenance','09 Jul 2025'],['Plant Manager','Khalid Rahman']
+    ],
+    sensors: [
+      ['0.00','m³/s','Flow Rate'],['55%','full','Tank Level'],['2.1','bar','Pressure'],
+      ['32°C','','Temperature'],['N/A','ppm','Salinity'],['0.3','MWh','Energy']
+    ],
+    status: 'maintenance'
+  }
+};
+
+function openModal(id) {
+  const data = plantData[id];
+  if(!data) return;
+
+  document.getElementById('modalTitle').textContent = data.title;
+
+  const statusColor = data.status === 'operational' ? 'var(--green)' : data.status === 'offline' ? 'var(--red)' : 'var(--orange)';
+
+  let fieldsHtml = '<div class="modal-grid">';
+  data.fields.forEach(([label, val]) => {
+    fieldsHtml += `<div class="modal-field"><div class="modal-field-label">${label}</div><div class="modal-field-val">${val}</div></div>`;
+  });
+  fieldsHtml += '</div>';
+
+  let sensorsHtml = '<div style="font-size:10px;font-family:\'IBM Plex Mono\',monospace;color:var(--text3);letter-spacing:1px;margin-bottom:8px;margin-top:8px">SENSOR READINGS</div><div class="modal-sensors">';
+  data.sensors.forEach(([val, unit, label]) => {
+    sensorsHtml += `<div class="modal-sensor"><div class="modal-sensor-val">${val}</div><div class="modal-sensor-lbl">${unit} ${label}</div></div>`;
+  });
+  sensorsHtml += '</div>';
+
+  const actions = data.status === 'offline'
+    ? `<button class="action-btn primary" onclick="showToast('Restart sequence initiated for ${data.title}','success');closeModal()">▶ Restart Plant</button>
+       <button class="action-btn warning" onclick="showToast('Dispatch team assigned','success')">🔧 Dispatch Team</button>
+       <button class="action-btn ghost" onclick="closeModal()">Close</button>`
+    : data.status === 'maintenance'
+    ? `<button class="action-btn primary" onclick="showToast('Plant marked ready','success');closeModal()">✅ Mark Ready</button>
+       <button class="action-btn ghost" onclick="closeModal()">Close</button>`
+    : `<button class="action-btn primary" onclick="closeModal()">✓ OK</button>
+       <button class="action-btn danger" onclick="showToast('Shutdown initiated','critical');closeModal()">⛔ Shutdown</button>
+       <button class="action-btn warning" onclick="showToast('Maintenance scheduled','success');closeModal()">📅 Schedule Maint.</button>
+       <button class="action-btn ghost" onclick="closeModal()">Close</button>`;
+
+  document.getElementById('modalBody').innerHTML = fieldsHtml + sensorsHtml + `<div class="modal-actions">${actions}</div>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if(!e || e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+// ===== TOAST =====
+function showToast(msg, type='success') {
+  const tc = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<div style="font-weight:700;margin-bottom:2px;color:${type==='critical'?'var(--red)':'var(--green)'}">${type==='critical'?'⚠ Alert':'✓ Success'}</div><div style="font-size:11px;color:var(--text2)">${msg}</div>`;
+  tc.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.3s';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+// Animate sensor values
+function animateSensors() {
+  document.querySelectorAll('.sensor-val').forEach(el => {
+    const base = parseFloat(el.textContent);
+    if(!isNaN(base) && base > 0) {
+      const jitter = (Math.random() - 0.5) * 0.05 * base;
+      const newVal = (base + jitter).toFixed(base > 100 ? 0 : 2);
+      el.textContent = newVal;
+    }
+  });
+}
+setInterval(animateSensors, 4000);
+
+// Initial toast
+setTimeout(() => showToast('SCADA connection established · 847 sensors online', 'success'), 1500);
+setTimeout(() => showToast('CRITICAL: DWP-12 Failure — immediate action required', 'critical'), 4000);
+</script>
+</body>
+</html>
